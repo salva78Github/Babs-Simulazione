@@ -2,22 +2,30 @@ package it.polito.tdp.babs.model;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import it.polito.tdp.babs.db.BabsDAO;
 
 public class Model {
 
-	BabsDAO babsDAO;
-	List<Station> stazioni;
+	private BabsDAO babsDAO;
+	private List<Station> stazioni;
+	private Map<Integer, Station> mappaStazioni;
 	
 	public Model(){
 		babsDAO = new BabsDAO();
+		mappaStazioni = new HashMap<Integer, Station>();
 	}
 	
 	public List<Station> getStazioni() {
-		if (stazioni == null)
+		if (stazioni == null) {
 			stazioni = babsDAO.getAllStations();
+			for (Station station : stazioni) {
+				mappaStazioni.put(station.getStationID(), station);
+			}
+		}
 		return stazioni;
 	}
 	
@@ -34,6 +42,10 @@ public class Model {
 		return stats;
 	}
 
+	public Station getStationById(int idStation){
+		return mappaStazioni.get(idStation);
+	}
+	
 	public List<Trip> getTripsWithPickForDay(LocalDate ld) {
 		return babsDAO.getTripsForDayPick(ld);
 	}

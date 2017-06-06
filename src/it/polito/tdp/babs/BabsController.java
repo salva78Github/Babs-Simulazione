@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 import it.polito.tdp.babs.model.Model;
+import it.polito.tdp.babs.model.SimulationResult;
 import it.polito.tdp.babs.model.Simulazione;
 import it.polito.tdp.babs.model.Statistics;
 import it.polito.tdp.babs.model.Trip;
@@ -45,7 +46,7 @@ public class BabsController {
 
 		txtResult.clear();
 
-		LocalDate ld =  pickData.getValue();
+		LocalDate ld = pickData.getValue();
 		if (ld == null) {
 			txtResult.setText("Selezionare una data");
 			return;
@@ -69,24 +70,27 @@ public class BabsController {
 
 		txtResult.clear();
 
-		LocalDate ld =  pickData.getValue();
+		LocalDate ld = pickData.getValue();
 		if (ld == null || ld.getDayOfWeek() == DayOfWeek.SATURDAY || ld.getDayOfWeek() == DayOfWeek.SATURDAY) {
 			txtResult.setText("Selezionare una giorno feriale!");
 			return;
 		}
-		
+
 		Double k = (double) sliderK.getValue() / 100.0;
-		
+
 		List<Trip> tripsPick = model.getTripsWithPickForDay(ld);
 		List<Trip> tripsDrop = model.getTripsWithDropForDay(ld);
-		
-		Simulazione simulazione = new Simulazione();
+
+		Simulazione simulazione = new Simulazione(model);
 		simulazione.loadPick(tripsPick);
-		simulazione.loadDrop(tripsDrop);
+		// Potrebbe falsare il risultato della simulazione
+		// simulazione.loadDrop(tripsDrop);
+		
 		simulazione.loadStations(k, model.getStazioni());
 		simulazione.run();
-		simulazione.collectResults();
-		
+		SimulationResult simulationResult = simulazione.collectResults();
+		txtResult.appendText("PICK MISS: " + simulationResult.getNumberOfPickMiss());
+		txtResult.appendText("DROP MISS: " + simulationResult.getNumberOfDropMiss());
 	}
 
 	@FXML
