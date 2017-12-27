@@ -1,59 +1,123 @@
 package it.polito.tdp.babs.model;
 
+import com.javadocmd.simplelatlng.LatLng;
+
 public class Station {
 
 	private int stationID;
 	private String name;
-	private double lat;
-	private double lon;
+	private LatLng position;
 	private int dockCount;
+	private String city;
+	private int busyPlaces;
 
-	public Station(int stationID, String name, double lat, double lon, int dockCount) {
-		super();
+	/**
+	 * @param stationID
+	 * @param name
+	 * @param position
+	 * @param dockCount
+	 * @param city
+	 */
+	public Station(int stationID, String name, LatLng position, int dockCount, String city) {
 		this.stationID = stationID;
 		this.name = name;
-		this.lat = lat;
-		this.lon = lon;
+		this.position = position;
 		this.dockCount = dockCount;
+		this.city = city;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + stationID;
+		return result;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Station other = (Station) obj;
+		if (stationID != other.stationID)
+			return false;
+		return true;
+	}
+
+	/**
+	 * @return the stationID
+	 */
 	public int getStationID() {
 		return stationID;
 	}
 
-	public void setStationID(int stationID) {
-		this.stationID = stationID;
-	}
-
+	/**
+	 * @return the name
+	 */
 	public String getName() {
 		return name;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	/**
+	 * @return the position
+	 */
+	public LatLng getPosition() {
+		return position;
 	}
 
-	public double getLat() {
-		return lat;
-	}
-
-	public void setLat(double lat) {
-		this.lat = lat;
-	}
-
-	public double getLon() {
-		return lon;
-	}
-
-	public void setLon(double lon) {
-		this.lon = lon;
-	}
-
+	/**
+	 * @return the dockCount
+	 */
 	public int getDockCount() {
 		return dockCount;
 	}
 
-	public void setDockCount(int dockCount) {
-		this.dockCount = dockCount;
+	/**
+	 * @return the city
+	 */
+	public String getCity() {
+		return city;
 	}
+
+
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "Station [stationID=" + stationID + ", name=" + name + ", position=" + position + ", dockCount="
+				+ dockCount + ", city=" + city + ", busyPlaces=" + busyPlaces + "]";
+	}
+
+	/**
+	 * @return the busyPlaces
+	 */
+	public int getBusyPlaces() {
+		return busyPlaces;
+	}
+
+	/**
+	 * @param busyPlaces the busyPlaces to set
+	 */
+	public void setBusyPlaces(int busyPlaces) {
+		this.busyPlaces = busyPlaces;
+	}
+
+
+
 }

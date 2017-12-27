@@ -1,13 +1,21 @@
 package it.polito.tdp.babs.db;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+
+import javax.sql.DataSource;
+
+import com.mchange.v2.c3p0.DataSources;
+
+import it.polito.tdp.babs.exception.BabsException;
 
 public class DBConnect {
 
-	static private final String jdbcUrl = "jdbc:mysql://localhost/babs?user=root";
+	static private final String jdbcUrl = "jdbc:mysql://localhost/babs?user=root&password=salva_root";
 	static private DBConnect instance = null;
+	private static DataSource ds;
 
 	private DBConnect() {
 		instance = this;
@@ -21,15 +29,54 @@ public class DBConnect {
 		}
 	}
 
-	public Connection getConnection() {
+	public Connection getConnection() throws BabsException {
+
+		if (ds == null) {
+			// crea il DataSource
+			try {
+				ds = DataSources.pooledDataSource(DataSources.unpooledDataSource(jdbcUrl));
+			} catch (SQLException sqle) {
+				sqle.printStackTrace();
+				throw new BabsException("Errore nella creazione del datasource", sqle);
+			}
+		}
+
 		try {
-			
-			Connection conn = DriverManager.getConnection(jdbcUrl);
-			return conn;
-			
+			Connection c = ds.getConnection();
+			return c;
+		} catch (SQLException sqle) {
+			// TODO Auto-generated catch block
+			sqle.printStackTrace();
+			throw new BabsException("Errore nel recupero della connessione. ", sqle);
+		}
+
+	}
+
+	public void closeResources(Connection c, Statement s, ResultSet rs) {
+		try {
+			if (rs != null) {
+				rs.close();
+			}
 		} catch (SQLException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
-			throw new RuntimeException("Errore di connessione al database");
+		}
+		try {
+			if (s != null) {
+				s.close();
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		try {
+			if (c != null) {
+				c.close();
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
+
 }
