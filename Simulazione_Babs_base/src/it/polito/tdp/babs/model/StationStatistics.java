@@ -72,8 +72,11 @@ public class StationStatistics implements Comparable<StationStatistics>{
 	@Override
 	public int compareTo(StationStatistics arg0) {
 		// TODO Auto-generated method stub
+		return Double.compare(this.station.getPosition().getLatitude(),arg0.getStation().getPosition().getLatitude());
+		/*
 		double difference =  (this.station.getPosition().getLatitude()-arg0.getStation().getPosition().getLatitude());
 		return difference>0?-1:(difference<0?1:0);
+		*/
 	}
 
 }

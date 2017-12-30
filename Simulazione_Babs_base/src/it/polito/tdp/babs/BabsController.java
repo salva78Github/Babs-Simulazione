@@ -40,7 +40,12 @@ public class BabsController {
 
 	@FXML
 	void doContaTrip(ActionEvent event) {
+		txtResult.clear();
+		
 		LocalDate ld = this.pickData.getValue();
+		if(ld==null){
+			this.txtResult.setText("Selezionare una data");
+		}
 		System.out.println("<doContaTrip> ld: " + ld.toString());
 		
 		try {
